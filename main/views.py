@@ -37,6 +37,12 @@ class SeriesListView(APIView):
 
 class SeasonListView(APIView):
     def get(self, request, format=None, **kwargs):
-        movie = Season.objects.filter(category__name = kwargs["name"]).filter(id=kwargs["pk"]).first()
-        serializer = MovieDetailSerializer(instance=movie)
+        movie = Season.objects.filter(series__category__name = kwargs["name"]).filter(series__id=kwargs["pk"])
+        serializer = SeasonListSerializer(instance=movie, many=True)
         return Response(serializer.data)
+
+class SeasonDetailView(generics.RetrieveAPIView):
+    queryset = Season.objects.all()
+    serializer_class = SeasonDetailSerializer
+    permission_classes = [permissions.AllowAny]
+    lookup_field = 'id'

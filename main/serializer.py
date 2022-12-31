@@ -69,9 +69,11 @@ class SeriesListSerializer(serializers.ModelSerializer):
         ]
 
 class SeasonListSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(many=True, read_only=True)
     class Meta:
         model = Season
         fields = [
+            "category",
             "id",
             "image",
             "title",
